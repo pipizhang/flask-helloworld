@@ -1,6 +1,7 @@
 #!/bin/env python
 from flask import Flask
 from flask import request
+from flask import render_template
 from lib import os
 from lib import helper
 
@@ -8,11 +9,12 @@ app = Flask(__name__)
 
 @app.route("/")
 def home():
-    return "It works"
+    return render_template("home.html", msg="It works")
 
-@app.route("/ping")
-def ping():
-    return "pong"
+@app.route("/hello")
+@app.route("/hello/<name>")
+def hello(name="Flask"):
+    return render_template("hello.html", name=name.strip().title())
 
 @app.route("/uname")
 def uname():
@@ -27,12 +29,9 @@ def df():
     return os.df()
 
 @app.route("/top", methods=["GET", "POST"])
-def hello():
+def top():
     return helper.mtop()
 
-@app.route("/park")
-def pk():
-    return helper.park()
-
-app.run(port=3000)
+if __name__ == "__main__":
+    app.run(port=3000)
 
